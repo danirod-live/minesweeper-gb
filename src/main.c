@@ -4,18 +4,22 @@
 #include "../res/sweeper_tiles.h"
 #include "../res/sweeper_back.h"
 
-int score = 0;
-int time = 0;
+#include "vars.h"
+#include "timer.h"
+#include "mines.h"
 
-static unsigned char sweeper_front_timer[] = { 0x18, 0x18,0x18 };
-static unsigned char sweeper_front_score[] = {0x18, 0x18, 0x18};
+
+
+
 
 void main(void)
 {
-	set_bkg_data(0, 34, sweeper_tiles);
+	set_bkg_data(0, sweeper_tilesLen, sweeper_tiles);
 	set_bkg_tiles(0, 0, 20, 18, sweeper_backend);
-	set_bkg_tiles(5, 1, 3, 1, sweeper_front_score);
-	set_bkg_tiles(14, 1, 3, 1, sweeper_front_score);
+
+	timer_reset();
+	reset_mines();
+
 	SHOW_BKG;
 	
     // Loop forever
@@ -27,5 +31,6 @@ void main(void)
 
 		// Done processing, yield CPU and wait for start of next frame
         wait_vbl_done();
+		timer_tick();
     }
 }
