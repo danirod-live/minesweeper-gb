@@ -16,6 +16,9 @@ struct state {
 
 	// Actual gameplay.
 	unsigned char tiles[GRID_TILES];
+	
+	// Cursor
+	int cursor_x, cursor_y;
 };
 
 extern struct state gamestate;
