@@ -8,35 +8,39 @@
 #include "state.h"
 #include "hud.h"
 #include "grid.h"
+#include "sprite.h"
+#include "input.h"
 
-void main(void)
+void init(void)
 {
 	set_bkg_data(0, sweeper_tilesLen, sweeper_tiles);
 	set_bkg_tiles(0, 0, 20, 18, sweeper_backend);
-	
+	SHOW_BKG;
+	sprite_load();
+}
 
+void main(void)
+{
+	init();
+	
 	state_reset();
 	grid_repaint();
-	hud_repaint();
-
-	SHOW_BKG;
 	
-	SPRITES_8x8;
-	set_sprite_data(0, 4, sweeper_sprites);
-	SHOW_SPRITES;
-	set_sprite_tile(0, 0);
-	set_sprite_tile(1, 1);
-	set_sprite_tile(2, 2);
-	set_sprite_tile(3, 3);
-
+	hud_repaint();
+	sprite_redraw();
+	
 	// Loop forever.
 	while(1) {
-		// Yield CPU and wait for the next frame.
-		wait_vbl_done();
+		// Input
+		input_check();
 		
 		// Tick the game state and maybe repaint the counters.
 		if (state_tick()) {
 			hud_repaint();
 		}
+		sprite_redraw();
+		
+		// Yield CPU and wait for the next frame.
+		wait_vbl_done();
 	}
 }

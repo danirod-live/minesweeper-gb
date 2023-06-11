@@ -56,8 +56,4 @@ void grid_repaint()
 {
 	grid_update_tileset();
 	set_bkg_tiles(TILE_SPRITE_X, TILE_SPRITE_Y, GRID_WIDTH * 2, GRID_HEIGHT * 2, grid_tileset);
-	move_sprite(0, 30 + 16 * gamestate.cursor_x, 52 + 16 * gamestate.cursor_y);
-	move_sprite(1, 30 + 16 * gamestate.cursor_x, 60 + 16 * gamestate.cursor_y);
-	move_sprite(2, 38 + 16 * gamestate.cursor_x, 52 + 16 * gamestate.cursor_y);
-	move_sprite(3, 38 + 16 * gamestate.cursor_x, 60 + 16 * gamestate.cursor_y);
 }
