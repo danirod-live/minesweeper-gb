@@ -33,7 +33,7 @@ state_computebounds()
 			
 			count = 0;
 			for (dy = y - 1; dy <= y + 1; dy++) {
-				for (dx = x - 1; dx <= x - 1; dx++) {
+				for (dx = x - 1; dx <= x + 1; dx++) {
 					if (dx < 0 || dy < 0 || dx >= GRID_WIDTH || dy >= GRID_HEIGHT) {
 						continue;
 					}
@@ -66,6 +66,7 @@ void state_reset()
 	gamestate.cursor_x = 0;
 	gamestate.cursor_y = 0;
 	memset(gamestate.tiles, 0, GRID_TILES);
+	memset(gamestate.flags, 0, GRID_TILES);
 	state_setmines();
 	state_computebounds();
 }

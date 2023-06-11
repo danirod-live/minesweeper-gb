@@ -8,6 +8,9 @@
 // Converts some coordinates into the linear index.
 #define GRID_IDX(x, y) (GRID_WIDTH * y + x)
 
+#define FLAG_SHOWN 0x01
+#define FLAG_FLAG 0x02
+
 struct state {
 	// Logical state.
 	int timer;
@@ -16,6 +19,7 @@ struct state {
 
 	// Actual gameplay.
 	unsigned char tiles[GRID_TILES];
+	unsigned char flags[GRID_TILES];
 	
 	// Cursor
 	int cursor_x, cursor_y;

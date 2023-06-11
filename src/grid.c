@@ -38,7 +38,13 @@ grid_update_tileset()
 	// place my tiles.
 	for (y = 0; y < GRID_HEIGHT; y++) {
 		for (x = 0; x < GRID_WIDTH; x++) {
-			value = gamestate.tiles[GRID_IDX(x, y)];
+			if (gamestate.flags[GRID_IDX(x, y)] & FLAG_SHOWN) {
+				value = gamestate.tiles[GRID_IDX(x, y)];
+			} else if (gamestate.flags[GRID_IDX(x, y)] & FLAG_FLAG) {
+				value = 10;
+			} else {
+				value = 11;
+			}
 			sprite = TILE_SPRITE(value);
 			spritepos = TILESET_IDX(x, y);
 			
@@ -56,4 +62,25 @@ void grid_repaint()
 {
 	grid_update_tileset();
 	set_bkg_tiles(TILE_SPRITE_X, TILE_SPRITE_Y, GRID_WIDTH * 2, GRID_HEIGHT * 2, grid_tileset);
+}
+
+void grid_unlock(uint8_t x, uint8_t y)
+{
+	if (!gamestate.flags[GRID_IDX(x, y)]) {
+		gamestate.flags[GRID_IDX(x, y)] |= FLAG_SHOWN;
+	}
+}
+
+void grid_toggle_flag(uint8_t x, uint8_t y)
+{
+	if (gamestate.flags[GRID_IDX(x, y)] & FLAG_SHOWN) {
+		return;
+	}
+	if (gamestate.flags[GRID_IDX(x, y)] & FLAG_FLAG) {
+		gamestate.flags[GRID_IDX(x, y)] &= ~FLAG_FLAG;
+		gamestate.mines++;
+	} else {
+		gamestate.flags[GRID_IDX(x, y)] |= FLAG_FLAG;
+		gamestate.mines--;
+	}
 }
