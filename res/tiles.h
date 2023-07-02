@@ -9,8 +9,8 @@
   Format               : Gameboy 4 color.
   Compression          : None.
   Counter              : Tile-count as Constant.
-  Tile size            : 16 x 16
-  Tiles                : 0 to 4
+  Tile size            : 8 x 8
+  Tiles                : 0 to 6
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -29,7 +29,7 @@
 #define sweeper_spritesBank 0
 /* Start of tile array. */
 extern const unsigned char sweeper_sprites[];
-#define sweeper_spritesLen 5
+#define sweeper_spritesLen 7
 
 #endif
 
