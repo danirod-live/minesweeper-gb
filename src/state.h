@@ -11,7 +11,17 @@
 #define FLAG_SHOWN 0x01
 #define FLAG_FLAG 0x02
 
+#define STATE_GAMEOVER 0x01
+#define STATE_REPAINT 0x02
+
+#define STATE_GET(var) (gamestate.state & var)
+#define STATE_SET(var) (gamestate.state |= var)
+#define STATE_UNSET(var) (gamestate.state &= ~var)
+
 struct state {
+	// Binary state.
+	int state;
+	
 	// Logical state.
 	int timer;
 	int ticks;

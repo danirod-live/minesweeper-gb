@@ -24,10 +24,7 @@ void main(void)
 	init();
 	
 	state_reset();
-	grid_repaint();
-	
-	hud_repaint();
-	sprite_redraw();
+	STATE_SET(STATE_REPAINT);
 	
 	// Loop forever.
 	while(1) {
@@ -36,9 +33,13 @@ void main(void)
 		
 		// Tick the game state and maybe repaint the counters.
 		if (state_tick()) {
-			hud_repaint();
+			STATE_SET(STATE_REPAINT);
 		}
-		sprite_redraw();
+		if (STATE_GET(STATE_REPAINT)) {
+			grid_repaint();
+			hud_repaint();
+			sprite_redraw();
+		}
 		
 		// Yield CPU and wait for the next frame.
 		wait_vbl_done();

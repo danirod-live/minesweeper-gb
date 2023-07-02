@@ -7,9 +7,23 @@
 
 // TODO: move these variables to state.h
 uint8_t frames = 0;
-uint8_t is_flagging = 0;
+
+// Used in order to detect when the user presses B to stop
+// keyboard events until you release the B key again.
+// Otherwise, it toggles the flag on every frame.
+static uint8_t holding_flag_key = 0;
 
 #define J_CRUCETA (J_UP | J_DOWN | J_LEFT | J_RIGHT)
+
+static void
+toggle_flag(void)
+{
+	if (!holding_flag_key) {
+		grid_toggle_flag(gamestate.cursor_x, gamestate.cursor_y);
+		holding_flag_key = 1;
+		STATE_SET(STATE_REPAINT);
+	}
+}
 
 void
 input_check(void)
@@ -34,22 +48,20 @@ input_check(void)
 				gamestate.cursor_x++;
 		}
 	}
-	
+
+	// If the user presses A, unlock the tile where the cursor is.
 	if (input & J_A) {
 		grid_unlock(gamestate.cursor_x, gamestate.cursor_y);
-		grid_repaint();
+		STATE_SET(STATE_REPAINT);
 	}
+
 	if (input & J_B) {
-		if (!is_flagging) {
-			grid_toggle_flag(gamestate.cursor_x, gamestate.cursor_y);
-			grid_repaint();
-			hud_repaint();
-			is_flagging = 1;
-		}
+		toggle_flag();
 	} else {
-		is_flagging = 0;
+		// Because the user is not holding the B any more, raise flag.
+		holding_flag_key = 0;
 	}
-	
+
 	// Number of consecutive frames where the keypad has been pressed.
 	if (input & J_CRUCETA) {
 		if (++frames == 60)
