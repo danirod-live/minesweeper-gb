@@ -29,6 +29,13 @@ sprite_load(void)
 void
 sprite_redraw(void)
 {
+	int i;
+	if (STATE_GET(STATE_GAMEOVER)) {
+		for (i = 0; i < 7; i++) {
+			hide_sprite(i);
+		}
+		return;
+	}
 	move_sprite(0, SPRITE_POS_X(gamestate.cursor_x), SPRITE_POS_Y(gamestate.cursor_y));
 	move_sprite(1, SPRITE_POS_X(gamestate.cursor_x), SPRITE_POS_Y(gamestate.cursor_y) + 8);
 	move_sprite(2, SPRITE_POS_X(gamestate.cursor_x), SPRITE_POS_Y(gamestate.cursor_y) + 16);

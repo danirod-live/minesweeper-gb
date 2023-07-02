@@ -29,6 +29,10 @@ void
 input_check(void)
 {
 	int input = joypad();
+	
+	if (STATE_GET(STATE_GAMEOVER)) {
+		return;
+	}
 
 	if (frames == 0) {
 		if (input & J_UP) {

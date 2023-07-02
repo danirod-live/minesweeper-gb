@@ -8,9 +8,9 @@
 #define TILE_SPRITE_BASE 36
 
 // Some special tile indices.
-#define TILE_EMPTY 0
 #define TILE_BOMB 9
 #define TILE_FLAG 10
+#define TILE_UNDISCOVERED 11
 
 // These are the offsets from the top of the screen on where the background
 // tiles for the grid start. They have to be added for any framebuffer
@@ -25,6 +25,7 @@ static unsigned char grid_tileset[GRID_TILES * 4];
 // specific tile. (Remember to do +1 on the sides for the four tiles).
 #define TILESET_IDX(x, y) (4 * GRID_WIDTH * y + 2 * x)
 
+// The actual sprite index (offseted to avoid drawing the borders.)
 #define TILE_SPRITE(val) (TILE_SPRITE_BASE + 4 * val)
 
 static void
@@ -38,12 +39,20 @@ grid_update_tileset()
 	// place my tiles.
 	for (y = 0; y < GRID_HEIGHT; y++) {
 		for (x = 0; x < GRID_WIDTH; x++) {
+			// If the tile is visible, put the sprite value of the tile.
+			// Supposedly this tile will encode a value between 0 and 9 (inclusive)
+			// with the number of bombs that are around. (0 is an empty tile,
+			// and 9 is drawing a bomb.)
 			if (gamestate.flags[GRID_IDX(x, y)] & FLAG_SHOWN) {
 				value = gamestate.tiles[GRID_IDX(x, y)];
-			} else if (gamestate.flags[GRID_IDX(x, y)] & FLAG_FLAG) {
-				value = 10;
-			} else {
-				value = 11;
+			}
+			// If the flag is marked with a flag, use the flag sprite.
+			else if (gamestate.flags[GRID_IDX(x, y)] & FLAG_FLAG) {
+				value = TILE_FLAG;
+			}
+			// Use the wall sprite because we don't know what is there.
+			else {
+				value = TILE_UNDISCOVERED;
 			}
 			sprite = TILE_SPRITE(value);
 			spritepos = TILESET_IDX(x, y);
@@ -57,7 +66,7 @@ grid_update_tileset()
 	}
 }
 
-// { base + 0, base + 2, base + 1, base + 3};
+// { base + 0, base + 2, base + 1, base + 3 };
 void grid_repaint()
 {
 	grid_update_tileset();
@@ -66,8 +75,13 @@ void grid_repaint()
 
 void grid_unlock(uint8_t x, uint8_t y)
 {
-	if (!gamestate.flags[GRID_IDX(x, y)]) {
-		gamestate.flags[GRID_IDX(x, y)] |= FLAG_SHOWN;
+	register int id = GRID_IDX(x, y);
+	if (!gamestate.flags[id]) {
+		gamestate.flags[id] |= FLAG_SHOWN;
+		if (gamestate.tiles[id] == TILE_BOMB && gamestate.flags[id] | FLAG_SHOWN) {
+			STATE_SET(STATE_GAMEOVER);
+			STATE_SET(STATE_REPAINT);
+		}
 	}
 }
 

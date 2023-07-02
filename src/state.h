@@ -8,7 +8,9 @@
 // Converts some coordinates into the linear index.
 #define GRID_IDX(x, y) (GRID_WIDTH * y + x)
 
+// Flag: is currently visible.
 #define FLAG_SHOWN 0x01
+// Flag: is marked with a flag.
 #define FLAG_FLAG 0x02
 
 #define STATE_GAMEOVER 0x01
@@ -29,6 +31,8 @@ struct state {
 
 	// Actual gameplay.
 	unsigned char tiles[GRID_TILES];
+	
+	// The flag for each one of the cells.
 	unsigned char flags[GRID_TILES];
 	
 	// Cursor

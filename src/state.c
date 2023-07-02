@@ -50,6 +50,9 @@ state_computebounds()
 unsigned
 state_tick()
 {
+	if (STATE_GET(STATE_GAMEOVER)) {
+		return 0;
+	}
 	if (++gamestate.ticks > 60) {
 		gamestate.ticks -= 60;
 		gamestate.timer++;
@@ -60,6 +63,7 @@ state_tick()
 
 void state_reset()
 {
+	gamestate.state = 0;
 	gamestate.timer = 0;
 	gamestate.ticks = 0;
 	gamestate.mines = 8;
