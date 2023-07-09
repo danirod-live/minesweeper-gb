@@ -1,5 +1,6 @@
 #include <string.h>
 #include <rand.h>
+#include <gb/gb.h>
 
 #include "state.h"
 #include "sound.h"
@@ -64,6 +65,7 @@ state_tick()
 
 void state_reset()
 {
+	initrand(DIV_REG);
 	gamestate.state = 0;
 	gamestate.timer = 0;
 	gamestate.ticks = 0;

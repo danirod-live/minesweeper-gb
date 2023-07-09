@@ -24,6 +24,7 @@ void main(void)
 	init();
 	
 	state_reset();
+	STATE_SET(STATE_NEEDS_RESET);
 	// STATE_SET(STATE_GAMEOVER);
 	STATE_SET(STATE_REPAINT);
 	

@@ -96,9 +96,24 @@ void grid_repaint()
 
 void grid_unlock(uint8_t x, uint8_t y)
 {
+	int dx, dy;
+	
+	if (x < 0 || y < 0 || x >= GRID_WIDTH || y >= GRID_HEIGHT) {
+		return;
+	}
 	register int id = GRID_IDX(x, y);
 	if (!gamestate.flags[id]) {
 		gamestate.flags[id] |= FLAG_SHOWN;
+		if (gamestate.tiles[id] == 0) {
+			for (dx = x - 1; dx <= x + 1; dx++) {
+				for (dy = y - 1; dy <= y + 1; dy++) {
+					if (x == dx && y == dy) {
+						continue;
+					}
+					grid_unlock(dx, dy);
+				}
+			}
+		}
 		if (gamestate.tiles[id] == TILE_BOMB && gamestate.flags[id] | FLAG_SHOWN) {
 			sound_gameover();
 			STATE_SET(STATE_GAMEOVER);

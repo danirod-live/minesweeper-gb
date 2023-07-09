@@ -29,6 +29,26 @@ activate_key(void)
 }
 
 static void
+check_first()
+{
+	unsigned int x, y, pos;
+	int is_invalid = 0;
+	
+	if (STATE_GET(STATE_NEEDS_RESET)) {
+		x = gamestate.cursor_x;
+		y = gamestate.cursor_y;
+		pos = GRID_IDX(x, y);
+		
+		do {
+			state_reset();
+			is_invalid = gamestate.tiles[pos] == 9;
+		} while (is_invalid);
+		gamestate.cursor_x = x;
+		gamestate.cursor_y = y;
+	}
+}
+
+static void
 toggle_flag(void)
 {
 	if (!holding_flag_key) {
@@ -73,6 +93,7 @@ input_check(void)
 
 	// If the user presses A, unlock the tile where the cursor is.
 	if (input & J_A) {
+		check_first();
 		activate_key();
 	} else {
 		holding_activate_key = 0;
