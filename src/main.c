@@ -24,22 +24,35 @@ void main(void)
 	init();
 	
 	state_reset();
+	// STATE_SET(STATE_GAMEOVER);
 	STATE_SET(STATE_REPAINT);
 	
-	// Loop forever.
-	while(1) {
+	// Loop until you lose.
+	while(!STATE_GET(STATE_GAMEOVER)) {
 		// Input
 		input_check();
-		
+
 		// Tick the game state and maybe repaint the counters.
 		if (state_tick()) {
 			STATE_SET(STATE_REPAINT);
 		}
+
 		if (STATE_GET(STATE_REPAINT)) {
 			grid_repaint();
 			hud_repaint();
 			sprite_redraw();
 		}
+
+		// Yield CPU and wait for the next frame.
+		wait_vbl_done();
+	}
+	
+	while (sound_isplaying());
+	STATE_SET(STATE_PAINTGAMEOVER);
+	
+	while (1) {
+		grid_repaint();
+		hud_repaint();
 		
 		// Yield CPU and wait for the next frame.
 		wait_vbl_done();

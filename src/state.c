@@ -2,6 +2,7 @@
 #include <rand.h>
 
 #include "state.h"
+#include "sound.h"
 
 struct state gamestate;
 

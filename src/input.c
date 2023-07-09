@@ -2,6 +2,7 @@
 #include "state.h"
 #include "grid.h"
 #include "hud.h"
+#include "sound.h"
 #include <gb/gb.h>
 #include <stdint.h>
 
@@ -12,8 +13,20 @@ uint8_t frames = 0;
 // keyboard events until you release the B key again.
 // Otherwise, it toggles the flag on every frame.
 static uint8_t holding_flag_key = 0;
+static uint8_t holding_activate_key = 0;
 
 #define J_CRUCETA (J_UP | J_DOWN | J_LEFT | J_RIGHT)
+
+static void
+activate_key(void)
+{
+	if (!holding_activate_key) {
+		grid_unlock(gamestate.cursor_x, gamestate.cursor_y);
+		sound_activate();
+		STATE_SET(STATE_REPAINT);
+		holding_activate_key = 1;
+	}
+}
 
 static void
 toggle_flag(void)
@@ -22,6 +35,7 @@ toggle_flag(void)
 		grid_toggle_flag(gamestate.cursor_x, gamestate.cursor_y);
 		holding_flag_key = 1;
 		STATE_SET(STATE_REPAINT);
+		sound_flag();
 	}
 }
 
@@ -36,18 +50,22 @@ input_check(void)
 
 	if (frames == 0) {
 		if (input & J_UP) {
+			sound_peep();
 			if (gamestate.cursor_y > 0)
 				gamestate.cursor_y--;
 		}
 		if (input & J_DOWN) {
+			sound_peep();
 			if (gamestate.cursor_y < GRID_HEIGHT-1)
 				gamestate.cursor_y++;
 		}
 		if (input & J_LEFT) {
+			sound_peep();
 			if (gamestate.cursor_x > 0)
 				gamestate.cursor_x--;
 		}
 		if (input & J_RIGHT) {
+			sound_peep();
 			if (gamestate.cursor_x < GRID_WIDTH-1)
 				gamestate.cursor_x++;
 		}
@@ -55,8 +73,9 @@ input_check(void)
 
 	// If the user presses A, unlock the tile where the cursor is.
 	if (input & J_A) {
-		grid_unlock(gamestate.cursor_x, gamestate.cursor_y);
-		STATE_SET(STATE_REPAINT);
+		activate_key();
+	} else {
+		holding_activate_key = 0;
 	}
 
 	if (input & J_B) {

@@ -10,7 +10,7 @@
   Compression          : None.
   Counter              : Tile-count as Constant.
   Tile size            : 8 x 8
-  Tiles                : 0 to 84
+  Tiles                : 0 to 127
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -29,7 +29,7 @@
 #define sweeper_tilesBank 0
 /* Start of tile array. */
 extern const unsigned char sweeper_tiles[];
-#define sweeper_tilesLen 85
+#define sweeper_tilesLen 128
 
 #endif
 

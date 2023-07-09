@@ -1,5 +1,6 @@
 #include "grid.h"
 #include "state.h"
+#include "sound.h"
 
 #include <gb/gb.h>
 #include <string.h>
@@ -28,11 +29,21 @@ static unsigned char grid_tileset[GRID_TILES * 4];
 // The actual sprite index (offseted to avoid drawing the borders.)
 #define TILE_SPRITE(val) (TILE_SPRITE_BASE + 4 * val)
 
+static void grid_paint16(unsigned int x, unsigned int y, unsigned int sprite)
+{
+	unsigned int spritepos = TILESET_IDX(x, y);
+	
+	grid_tileset[spritepos] = sprite + 0;
+	grid_tileset[spritepos + 1] = sprite + 2;
+	grid_tileset[spritepos + GRID_WIDTH * 2] = sprite + 1;
+	grid_tileset[spritepos + GRID_WIDTH * 2 + 1] = sprite + 3;
+}
+
 static void
 grid_update_tileset()
 {
 	unsigned x, y;
-	int value, sprite, spritepos;
+	int value, sprite;
 	
 	// I still haven't figured out how using linear fors here would help me,
 	// therefore I am just going to use a two-coordinate loop here, to
@@ -55,21 +66,31 @@ grid_update_tileset()
 				value = TILE_UNDISCOVERED;
 			}
 			sprite = TILE_SPRITE(value);
-			spritepos = TILESET_IDX(x, y);
-			
-			// Ugh... this is going to be ugly, I am sorry.
-			grid_tileset[spritepos] = sprite + 0;
-			grid_tileset[spritepos + 1] = sprite + 2;
-			grid_tileset[spritepos + GRID_WIDTH * 2] = sprite + 1;
-			grid_tileset[spritepos + GRID_WIDTH * 2 + 1] = sprite + 3;
+			grid_paint16(x, y, sprite);
 		}
 	}
+}
+
+static void
+grid_paint_gameover()
+{
+	grid_paint16(2, 2, 96);
+	grid_paint16(2, 3, 100);
+	grid_paint16(3, 2, 104);
+	grid_paint16(3, 3, 108);
+	grid_paint16(4, 2, 112);
+	grid_paint16(4, 3, 116);
+	grid_paint16(5, 2, 120);
+	grid_paint16(5, 3, 124);
 }
 
 // { base + 0, base + 2, base + 1, base + 3 };
 void grid_repaint()
 {
 	grid_update_tileset();
+	if (STATE_GET(STATE_PAINTGAMEOVER)) {
+		grid_paint_gameover();
+	}
 	set_bkg_tiles(TILE_SPRITE_X, TILE_SPRITE_Y, GRID_WIDTH * 2, GRID_HEIGHT * 2, grid_tileset);
 }
 
@@ -79,6 +100,7 @@ void grid_unlock(uint8_t x, uint8_t y)
 	if (!gamestate.flags[id]) {
 		gamestate.flags[id] |= FLAG_SHOWN;
 		if (gamestate.tiles[id] == TILE_BOMB && gamestate.flags[id] | FLAG_SHOWN) {
+			sound_gameover();
 			STATE_SET(STATE_GAMEOVER);
 			STATE_SET(STATE_REPAINT);
 		}
