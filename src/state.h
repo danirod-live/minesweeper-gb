@@ -31,13 +31,24 @@ struct state {
 	int ticks;
 	int mines;
 
-	// Actual gameplay.
-	unsigned char tiles[GRID_TILES];
-	
-	// The flag for each one of the cells.
+	// TODO: maybe compact these arrays into a single array?
+	// It is totally possible to pack the bits into a single
+	// unsigned char:
+	//
+	// 7 6 5 4 3 2 1 0
+	//   NUMBERS v F *
+	//   |       | | |-> * = mines
+	//   |       | |---> F = flagged
+	//   |       |-----> v = opened
+	//   |-------------> NUMBERS = precomputed numbers
+
+	// 1 for each position if there is a mine
+	unsigned char positions[GRID_TILES];
+	// the precomputed number of mines around each tile
+	unsigned char numbers[GRID_TILES];
+	// the positions that have been marked by the user
 	unsigned char flags[GRID_TILES];
-	
-	// Cursor
+
 	int cursor_x, cursor_y;
 };
 

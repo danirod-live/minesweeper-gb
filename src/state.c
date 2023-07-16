@@ -7,6 +7,7 @@
 
 struct state gamestate;
 
+// state_setmines will place mines.
 static void
 state_setmines()
 {
@@ -15,13 +16,13 @@ state_setmines()
 	for (i = 0; i < gamestate.mines; i++) {
 		do {
 			rnd = rand() % GRID_TILES;
-		} while (gamestate.tiles[rnd]);
-		gamestate.tiles[rnd] = 9;
+		} while (gamestate.positions[rnd]);
+		gamestate.positions[rnd] = 1;
 	}
 }
 
 void
-state_computebounds()
+state_setnumbers()
 {
 	uint8_t tile, x, y, count;
 	int dx, dy;
@@ -29,22 +30,22 @@ state_computebounds()
 	for (y = 0; y < GRID_HEIGHT; y++) {
 		for (x = 0; x < GRID_WIDTH; x++) {
 			tile = GRID_IDX(x, y);
-			if (gamestate.tiles[tile] == 9) {
+			if (gamestate.positions[tile]) {
+				gamestate.numbers[tile] = 9;
 				continue;
 			}
-			
 			count = 0;
 			for (dy = y - 1; dy <= y + 1; dy++) {
 				for (dx = x - 1; dx <= x + 1; dx++) {
 					if (dx < 0 || dy < 0 || dx >= GRID_WIDTH || dy >= GRID_HEIGHT) {
 						continue;
 					}
-					if (gamestate.tiles[GRID_IDX(dx, dy)] == 9) {
+					if (gamestate.positions[GRID_IDX(dx, dy)]) {
 						count++;
 					}
 				}
 			}
-			gamestate.tiles[tile] = count;
+			gamestate.numbers[tile] = count;
 		}
 	}
 }
@@ -72,8 +73,9 @@ void state_reset()
 	gamestate.mines = 8;
 	gamestate.cursor_x = 0;
 	gamestate.cursor_y = 0;
-	memset(gamestate.tiles, 0, GRID_TILES);
+	memset(gamestate.numbers, 0, GRID_TILES);
+	memset(gamestate.positions, 0, GRID_TILES);
 	memset(gamestate.flags, 0, GRID_TILES);
 	state_setmines();
-	state_computebounds();
+	state_setnumbers();
 }

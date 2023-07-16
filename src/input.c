@@ -41,7 +41,7 @@ check_first()
 		
 		do {
 			state_reset();
-			is_invalid = gamestate.tiles[pos] == 9;
+			is_invalid = gamestate.positions[pos] != 0;
 		} while (is_invalid);
 		gamestate.cursor_x = x;
 		gamestate.cursor_y = y;

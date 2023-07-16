@@ -55,7 +55,7 @@ grid_update_tileset()
 			// with the number of bombs that are around. (0 is an empty tile,
 			// and 9 is drawing a bomb.)
 			if (gamestate.flags[GRID_IDX(x, y)] & FLAG_SHOWN) {
-				value = gamestate.tiles[GRID_IDX(x, y)];
+				value = gamestate.numbers[GRID_IDX(x, y)];
 			}
 			// If the flag is marked with a flag, use the flag sprite.
 			else if (gamestate.flags[GRID_IDX(x, y)] & FLAG_FLAG) {
@@ -94,9 +94,9 @@ void grid_repaint()
 	set_bkg_tiles(TILE_SPRITE_X, TILE_SPRITE_Y, GRID_WIDTH * 2, GRID_HEIGHT * 2, grid_tileset);
 }
 
-void grid_unlock(uint8_t x, uint8_t y)
+void grid_unlock(int8_t x, int8_t y)
 {
-	int dx, dy;
+	int8_t dx, dy;
 	
 	if (x < 0 || y < 0 || x >= GRID_WIDTH || y >= GRID_HEIGHT) {
 		return;
@@ -104,7 +104,7 @@ void grid_unlock(uint8_t x, uint8_t y)
 	register int id = GRID_IDX(x, y);
 	if (!gamestate.flags[id]) {
 		gamestate.flags[id] |= FLAG_SHOWN;
-		if (gamestate.tiles[id] == 0) {
+		if (gamestate.numbers[id] == 0) {
 			for (dx = x - 1; dx <= x + 1; dx++) {
 				for (dy = y - 1; dy <= y + 1; dy++) {
 					if (x == dx && y == dy) {
@@ -114,7 +114,7 @@ void grid_unlock(uint8_t x, uint8_t y)
 				}
 			}
 		}
-		if (gamestate.tiles[id] == TILE_BOMB && gamestate.flags[id] | FLAG_SHOWN) {
+		if (gamestate.positions[id]) {
 			sound_gameover();
 			STATE_SET(STATE_GAMEOVER);
 			STATE_SET(STATE_REPAINT);
