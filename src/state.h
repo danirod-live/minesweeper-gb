@@ -16,7 +16,7 @@
 #define STATE_GAMEOVER 0x01
 #define STATE_REPAINT 0x02
 #define STATE_PAINTGAMEOVER 0x04
-#define STATE_NEEDS_RESET 0x08
+#define STATE_STARTED 0x08
 
 #define STATE_GET(var) (gamestate.state & var)
 #define STATE_SET(var) (gamestate.state |= var)
@@ -57,3 +57,4 @@ extern struct state gamestate;
 unsigned state_tick();
 void state_reset();
 void state_waitforgameover();
+void state_setnumbers();

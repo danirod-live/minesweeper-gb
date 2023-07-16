@@ -31,21 +31,17 @@ activate_key(void)
 static void
 check_first()
 {
-	unsigned int x, y, pos;
-	int is_invalid = 0;
-	
-	if (STATE_GET(STATE_NEEDS_RESET)) {
-		x = gamestate.cursor_x;
-		y = gamestate.cursor_y;
-		pos = GRID_IDX(x, y);
-		
-		do {
-			state_reset();
-			is_invalid = gamestate.positions[pos] != 0;
-		} while (is_invalid);
-		gamestate.cursor_x = x;
-		gamestate.cursor_y = y;
+	unsigned int pos = GRID_IDX(gamestate.cursor_x, gamestate.cursor_y);
+	unsigned int next = 0;
+	if (!STATE_GET(STATE_STARTED) && gamestate.positions[pos]) {
+		while (gamestate.positions[next]) {
+			next++;
+		}
+		gamestate.positions[pos] = 0;
+		gamestate.positions[next] = 1;
+		state_setnumbers();
 	}
+	STATE_SET(STATE_STARTED);
 }
 
 static void
