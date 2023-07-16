@@ -84,12 +84,27 @@ grid_paint_gameover()
 	grid_paint16(5, 3, 124);
 }
 
+static void
+grid_paint_gamewin()
+{
+	grid_paint16(2, 2, 128);
+	grid_paint16(2, 3, 132);
+	grid_paint16(3, 2, 136);
+	grid_paint16(3, 3, 140);
+	grid_paint16(4, 2, 144);
+	grid_paint16(4, 3, 148);
+	grid_paint16(5, 2, 152);
+	grid_paint16(5, 3, 156);
+}
+
 // { base + 0, base + 2, base + 1, base + 3 };
 void grid_repaint()
 {
 	grid_update_tileset();
 	if (STATE_GET(STATE_PAINTGAMEOVER)) {
 		grid_paint_gameover();
+	} else if (STATE_GET(STATE_PAINTWIN)) {
+		grid_paint_gamewin();
 	}
 	set_bkg_tiles(TILE_SPRITE_X, TILE_SPRITE_Y, GRID_WIDTH * 2, GRID_HEIGHT * 2, grid_tileset);
 }
@@ -135,3 +150,4 @@ void grid_toggle_flag(uint8_t x, uint8_t y)
 		gamestate.mines--;
 	}
 }
+

@@ -27,7 +27,7 @@ void main(void)
 	STATE_SET(STATE_REPAINT);
 	
 	// Loop until you lose.
-	while(!STATE_GET(STATE_GAMEOVER)) {
+	while(!STATE_GET(STATE_GAMEOVER) && !STATE_GET(STATE_GAMEWIN)) {
 		// Input
 		input_check();
 
@@ -47,7 +47,11 @@ void main(void)
 	}
 	
 	while (sound_isplaying());
-	STATE_SET(STATE_PAINTGAMEOVER);
+	if (STATE_GET(STATE_GAMEOVER)) {
+		STATE_SET(STATE_PAINTGAMEOVER);
+	} else if (STATE_GET(STATE_GAMEWIN)) {
+		STATE_SET(STATE_PAINTWIN);
+	}
 	
 	while (1) {
 		grid_repaint();

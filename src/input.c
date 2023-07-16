@@ -25,6 +25,12 @@ activate_key(void)
 		sound_activate();
 		STATE_SET(STATE_REPAINT);
 		holding_activate_key = 1;
+		
+		if (state_has_won()) {
+			sound_gamewin();
+			STATE_SET(STATE_GAMEWIN);
+			STATE_SET(STATE_REPAINT);
+		}
 	}
 }
 

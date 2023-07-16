@@ -80,5 +80,16 @@ sound_gameover()
 void
 sound_gamewin()
 {
+	if (sound_isplaying()) {
+		return;
+	}
 	
+	NR52_REG = 0x80;
+	NR51_REG = 0x11;
+	NR50_REG = 0x77;
+	NR10_REG = 0x1E;
+	NR11_REG = 0x10;
+	NR12_REG = 0xF3;
+	NR13_REG = 0x00;
+	NR14_REG = 0xC7;
 }

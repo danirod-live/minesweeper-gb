@@ -51,6 +51,20 @@ state_setnumbers()
 	}
 }
 
+int
+state_has_won()
+{
+	unsigned int i;
+	for (i = 0; i < GRID_WIDTH * GRID_HEIGHT; i++) {
+		int is_opened = (gamestate.flags[i] & FLAG_SHOWN);
+		int has_mine = (gamestate.positions[i]);
+		if (!is_opened && !has_mine) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
 unsigned
 state_tick()
 {
