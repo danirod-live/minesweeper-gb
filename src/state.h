@@ -27,6 +27,7 @@ struct state {
 	int state;
 	
 	// Logical state.
+	int lastsecond;
 	int timer;
 	int ticks;
 	int mines;

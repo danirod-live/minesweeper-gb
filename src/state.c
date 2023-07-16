@@ -1,6 +1,7 @@
 #include <string.h>
 #include <rand.h>
 #include <gb/gb.h>
+#include <time.h>
 
 #include "state.h"
 #include "sound.h"
@@ -53,13 +54,17 @@ state_setnumbers()
 unsigned
 state_tick()
 {
+	int seconds;
 	if (STATE_GET(STATE_GAMEOVER)) {
 		return 0;
 	}
-	if (++gamestate.ticks > 60) {
-		gamestate.ticks -= 60;
-		gamestate.timer++;
-		return 1;
+	if (STATE_GET(STATE_STARTED)) {
+		time(&seconds);
+		if (gamestate.lastsecond != seconds) {
+			gamestate.timer++;
+			gamestate.lastsecond = seconds;
+			return 1;
+		}
 	}
 	return 0;
 }
