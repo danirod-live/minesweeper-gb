@@ -8,10 +8,19 @@
 #include "../res/tiles.h"
 
 #include "state.h"
+#include "sound.h"
 #include "hud.h"
 #include "grid.h"
 #include "sprite.h"
 #include "input.h"
+
+static void
+wait_for_nokey()
+{
+	while (joypad()) {
+		wait_vbl_done();
+	}
+}
 
 static void
 wait_for_start()
@@ -35,7 +44,10 @@ main_menu()
 	set_bkg_tiles(0, 0, 20, 18, front);
 	SHOW_BKG;
 
+	wait_for_nokey();
 	wait_for_start();
+	sound_peep();
+	wait_for_nokey();
 }
 
 void
@@ -72,7 +84,7 @@ main_game()
 
 	HIDE_SPRITES;
 	
-	while (sound_isplaying());
+	// while (sound_isplaying());
 	if (STATE_GET(STATE_GAMEOVER)) {
 		STATE_SET(STATE_PAINTGAMEOVER);
 	} else if (STATE_GET(STATE_GAMEWIN)) {
@@ -81,6 +93,7 @@ main_game()
 
 	grid_repaint();
 	hud_repaint();
+	wait_for_nokey();
 	wait_for_start();
 }
 

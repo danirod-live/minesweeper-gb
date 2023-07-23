@@ -22,7 +22,6 @@ activate_key(void)
 {
 	if (!holding_activate_key) {
 		grid_unlock(gamestate.cursor_x, gamestate.cursor_y);
-		sound_activate();
 		STATE_SET(STATE_REPAINT);
 		holding_activate_key = 1;
 		
@@ -30,6 +29,9 @@ activate_key(void)
 			sound_gamewin();
 			STATE_SET(STATE_GAMEWIN);
 			STATE_SET(STATE_REPAINT);
+		}
+		if (!STATE_GET(STATE_GAMEOVER) && !STATE_GET(STATE_GAMEWIN)) {
+			sound_activate();
 		}
 	}
 }
