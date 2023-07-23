@@ -3,6 +3,8 @@
 
 #include "../res/sweeper_tiles.h"
 #include "../res/sweeper_back.h"
+#include "../res/intro_tiles.h"
+#include "../res/front.h"
 #include "../res/tiles.h"
 
 #include "state.h"
@@ -11,19 +13,35 @@
 #include "sprite.h"
 #include "input.h"
 
-void init(void)
+void
+main_menu()
 {
-	set_bkg_data(0, sweeper_tilesLen, sweeper_tiles);
-	set_bkg_tiles(0, 0, 20, 18, sweeper_backend);
+	// Load the front assets.
+	HIDE_BKG;
+	set_bkg_data(0, intro_tilesLen, intro_tiles);
+	set_bkg_tiles(0, 0, 20, 18, front);
 	SHOW_BKG;
-	sprite_load();
+
+	// Paint the main menu screen.
+	uint8_t start = 0, joy;
+
+	while (!start) {
+		// Check if START or A is pressed.
+		joy = joypad();
+		start = joy & (J_START | J_A);
+	}
 }
 
-void main(void)
+void
+main_game()
 {
-	init();
-	
+	HIDE_BKG;
+	set_bkg_data(0, sweeper_tilesLen, sweeper_tiles);
+	set_bkg_tiles(0, 0, 20, 18, sweeper_backend);
+	sprite_load();
 	state_reset();
+	SHOW_BKG;
+	
 	STATE_SET(STATE_REPAINT);
 	
 	// Loop until you lose.
@@ -59,5 +77,14 @@ void main(void)
 		
 		// Yield CPU and wait for the next frame.
 		wait_vbl_done();
+	}
+}
+
+void
+main(void)
+{
+	for (;;) {
+		main_menu();
+		main_game();
 	}
 }
