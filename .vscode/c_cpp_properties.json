@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "GameBoy",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:\\Users\\danirod\\Desktop\\GameBoy\\gbdk\\include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ]
+        }
+    ],
+    "version": 4
+}

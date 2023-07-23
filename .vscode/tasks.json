@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run",
+            "type": "process",
+            "command": "C:\\Users\\danirod\\Apps\\PortableApps\\VisualBoy\\visualboyadvance-m.exe",
+            "args": [
+                "obj/minesweeper.gb"
+            ],
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Compile",
+            "type": "shell",
+            "command": "C:\\msys64\\usr\\bin\\make.exe",
+            "options": {
+                "env": {
+                    "PATH": "C:\\msys64\\usr\\bin;C:\\Users\\danirod\\Desktop\\GameBoy\\gbdk\\bin"
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "C:\\msys64\\usr\\bin\\make.exe",
+            "args": [
+                "clean"
+            ],
+            "options": {
+                "env": {
+                    "PATH": "C:\\msys64\\usr\\bin;C:\\Users\\danirod\\Desktop\\GameBoy\\gbdk\\bin"
+                }
+            }
+        }
+    ]
+}
