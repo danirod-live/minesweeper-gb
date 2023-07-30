@@ -1,6 +1,6 @@
 /*
 
- FRONT.C
+ MAP_INTRO.C
 
  Map Source File.
 
@@ -8,7 +8,7 @@
    Section       : 
    Bank          : 0
    Map size      : 20 x 18
-   Tile set      : C:\Users\danirod\Desktop\GameBoy\game\res\intro.gbr
+   Tile set      : pal_intro.gbr
    Plane count   : 1 plane (8 bits)
    Plane order   : Planes are continues
    Tile offset   : 0
@@ -18,12 +18,12 @@
 
 */
 
-#define frontWidth 20
-#define frontHeight 18
-#define frontBank 0
+#define map_introWidth 20
+#define map_introHeight 18
+#define map_introBank 0
 
-#define front frontPLN0
-const unsigned char frontPLN0[] =
+#define map_intro map_introPLN0
+const unsigned char map_introPLN0[] =
 {
   0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,
   0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,
@@ -63,4 +63,4 @@ const unsigned char frontPLN0[] =
   0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C,0x3C
 };
 
-/* End of FRONT.C */
+/* End of MAP_INTRO.C */

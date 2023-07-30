@@ -1,7 +1,7 @@
 #include <gb/gb.h>
 #include "sprite.h"
 #include "state.h"
-#include "../res/tiles.h"
+#include "../res/pal_cursor.h"
 
 #define SPRITE_OFFSET_X 30
 #define SPRITE_OFFSET_Y 52
@@ -15,7 +15,7 @@ void
 sprite_load(void)
 {
 	SPRITES_8x8;
-	set_sprite_data(0, 7, sweeper_sprites);
+	set_sprite_data(0, pal_cursorLen, pal_cursor);
 	SHOW_SPRITES;
 	
 	set_sprite_tile(0, 0);

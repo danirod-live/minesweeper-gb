@@ -1,11 +1,11 @@
 #include <gb/gb.h>
 #include <stdint.h>
 
-#include "../res/sweeper_tiles.h"
-#include "../res/sweeper_back.h"
-#include "../res/intro_tiles.h"
-#include "../res/front.h"
-#include "../res/tiles.h"
+#include "../res/pal_game.h"
+#include "../res/pal_cursor.h"
+#include "../res/pal_intro.h"
+#include "../res/map_intro.h"
+#include "../res/map_game.h"
 
 #include "state.h"
 #include "sound.h"
@@ -40,8 +40,8 @@ main_menu()
 {
 	// Load the front assets.
 	HIDE_BKG;
-	set_bkg_data(0, intro_tilesLen, intro_tiles);
-	set_bkg_tiles(0, 0, 20, 18, front);
+	set_bkg_data(0, pal_introLen, pal_intro);
+	set_bkg_tiles(0, 0, 20, 18, map_intro);
 	SHOW_BKG;
 
 	wait_for_nokey();
@@ -54,8 +54,8 @@ void
 main_game()
 {
 	HIDE_BKG;
-	set_bkg_data(0, sweeper_tilesLen, sweeper_tiles);
-	set_bkg_tiles(0, 0, 20, 18, sweeper_backend);
+	set_bkg_data(0, pal_gameLen, pal_game);
+	set_bkg_tiles(0, 0, 20, 18, map_game);
 	sprite_load();
 	state_reset();
 	SHOW_BKG;
