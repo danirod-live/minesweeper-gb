@@ -13,6 +13,7 @@
 #include "grid.h"
 #include "sprite.h"
 #include "input.h"
+#include "savegame.h"
 
 static void
 wait_for_nokey()
@@ -42,8 +43,15 @@ main_menu()
 	HIDE_BKG;
 	set_bkg_data(0, pal_introLen, pal_intro);
 	set_bkg_tiles(0, 0, 20, 18, map_intro);
-	SHOW_BKG;
 
+	ENABLE_RAM_MBC1;
+	if (max_timer > 999) {
+		max_timer = 999;
+	}
+	hud_draw_maxtimer();
+	DISABLE_RAM_MBC1;
+	SHOW_BKG;
+	
 	wait_for_nokey();
 	wait_for_start();
 	sound_peep();
@@ -88,6 +96,11 @@ main_game()
 	if (STATE_GET(STATE_GAMEOVER)) {
 		STATE_SET(STATE_PAINTGAMEOVER);
 	} else if (STATE_GET(STATE_GAMEWIN)) {
+		ENABLE_RAM_MBC1;
+		if (gamestate.timer < max_timer) {
+			max_timer = gamestate.timer;
+		}
+		DISABLE_RAM_MBC1;
 		STATE_SET(STATE_PAINTWIN);
 	}
 
